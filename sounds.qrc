@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>singleType.wav</file>
+        <file>wordBoom.wav</file>
+        <file>type.wav</file>
+        <file>type.jpg</file>
+    </qresource>
+</RCC>
