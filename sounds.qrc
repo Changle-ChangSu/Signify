@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/game_sound_effect">
+        <file>sounds/singleType.wav</file>
+        <file>sounds/wordBoom.wav</file>
+        <file>sounds/eject.wav</file>
+    </qresource>
+</RCC>

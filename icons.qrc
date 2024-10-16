@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/navigator_icons">
+        <file>icons/study_icon_gray.png</file>
+        <file>icons/study_icon_white.png</file>
+        <file>icons/game_icon_gray.png</file>
+        <file>icons/game_icon_white.png</file>
+        <file>icons/record_icon_gray.png</file>
+        <file>icons/record_icon_white.png</file>
+    </qresource>
+</RCC>
