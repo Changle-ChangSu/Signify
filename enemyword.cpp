@@ -23,7 +23,7 @@ bool EnemyWord::appendBall(const QString &c) {
     bool ret;
     // 如果c是正确的，则添加ball
     // 否则就不添加
-    //qDebug() << c << word[curIndex];
+    // qDebug() << c << word[curIndex];
     if(c == word[curIndex]) {
         curIndex++;
         if(curIndex == word.size()) {

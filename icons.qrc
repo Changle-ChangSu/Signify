@@ -6,5 +6,7 @@
         <file>icons/game_icon_white.png</file>
         <file>icons/record_icon_gray.png</file>
         <file>icons/record_icon_white.png</file>
+        <file>icons/welcome_icon_gray.png</file>
+        <file>icons/welcome_icon_white.png</file>
     </qresource>
 </RCC>

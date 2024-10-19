@@ -1,5 +1,6 @@
 QT       += core gui
 QT += multimedia
+QT += multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,7 +18,8 @@ SOURCES += \
     homepage.cpp \
     mainwindow.cpp\
     studywidget.cpp \
-    main.cpp
+    welcome.cpp \
+    main.cpp \
 
 
 HEADERS += \
@@ -27,7 +29,8 @@ HEADERS += \
     gamewindowlabel.h \
     homepage.h \
     mainwindow.h \
-    studywidget.h
+    studywidget.h \
+    welcome.h
 
 FORMS += \
     mainwindow.ui
@@ -43,7 +46,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    font.qrc \
     icons.qrc \
+    images.qrc \
     sounds.qrc
 
 DISTFILES += \

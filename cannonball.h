@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QPoint>
 
-#define BALL_SPEED 30
+#define BALL_SPEED 40
 // 40ms前进一次
 class CannonBall : public QObject
 {

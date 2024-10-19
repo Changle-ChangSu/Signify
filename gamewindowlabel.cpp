@@ -1,11 +1,16 @@
 #include <QFile>
 #include <random>
-
+#include <QFontDatabase>
+#include <QFontDatabase>
+#include <QKeyEvent>
+#include <QApplication>
 #include "gamewindowlabel.h"
 #include "gamewidget.h"
 
+
 GameWindowLabel::GameWindowLabel(QWidget *parent) : QLabel(parent)
 {
+
     level = 1;
     score = 0;
     rightCnt = wrongCnt = 0;
@@ -13,6 +18,17 @@ GameWindowLabel::GameWindowLabel(QWidget *parent) : QLabel(parent)
     cannonLen = 220;
     lockedWord = NULL;
     begin = false;
+    // emit gameStatusChanged(begin);
+    isPaused = false;
+    showPauseMessage = true;
+    showStudyMessage = true;
+
+    // 创建定时器，控制闪烁效果
+    blinkTimer = new QTimer(this);
+    connect(blinkTimer, &QTimer::timeout, this, &GameWindowLabel::toggleMessages);
+
+    // 设置定时器间隔时间为 500 毫秒
+    blinkTimer->setInterval(800);
 
     // ====================================制造单词列表，即下落的单词============================================
 
@@ -79,7 +95,7 @@ GameWindowLabel::GameWindowLabel(QWidget *parent) : QLabel(parent)
     effectBoom->setLoopCount(1);  //循环次数
     effectBoom->setVolume(30.0f); //音量  0~1之间
 
-    setStyleSheet("background-color:#5095Bb");  // 设置背景颜色
+    setStyleSheet("background-color:#f7f9fc");  // 设置背景颜色
 
 
     timerCannon = new QTimer(this);
@@ -93,10 +109,14 @@ GameWindowLabel::GameWindowLabel(QWidget *parent) : QLabel(parent)
     // ====================================设置游戏主计时器timerRunning==========================================
 
     timerRunning = new QTimer(this);  // 游戏的主定时器，每 30 毫秒触发一次，用于处理敌人（单词）的移动和状态更新。
+
+    // 连接 GameWidget 的 togglePause 信号到 GameWindowLabel 的 onTogglePause 槽函数
+    connect((GameWidget *)parent, &GameWidget::togglePause, this, &GameWindowLabel::onTogglePause);
+
     connect(timerRunning, &QTimer::timeout, this, [=](){
-        if(begin == false) {
+        if(begin == false || isPaused == true) {
             return;
-        }  // 如果游戏没有开始，则不执行
+        }  // 如果游戏没有开始或者暂停了，则不执行
 
         for(int i=0; i<wordList.size(); i++) {
             EnemyWord *word = wordList[i];
@@ -114,6 +134,8 @@ GameWindowLabel::GameWindowLabel(QWidget *parent) : QLabel(parent)
                 effectBoom->play();
                 continue;
             }
+
+            // 如果单词跑到deadline上了，则游戏失败
             if(word->getDestoryed() == false && word->getPos().y() > gameDeadLine) {
 //                if(lockedWord == word) {
 //                    lockedWord = NULL;
@@ -121,23 +143,25 @@ GameWindowLabel::GameWindowLabel(QWidget *parent) : QLabel(parent)
 //                wordList.removeAt(i);
 //                delete word;
 
-                lockedWord = NULL;
+                // lockedWord = NULL;
 //                int size = wordList.size();
 //                for(int i=0; i<size; i++) {
 //                    EnemyWord *word = wordList[0];
 //                    wordList.removeAt(i);
 //                    delete word;
 //                }
-                foreach(EnemyWord *w, wordList)
-                {
-                    if(w)
-                    {
-                        wordList.removeOne(w);
-                        delete w;
-                        w = nullptr;
-                    }
-                }
-                begin = false;
+                // foreach(EnemyWord *w, wordList)
+                // {
+                //     if(w)
+                //     {
+                //         wordList.removeOne(w);
+                //         delete w;
+                //         w = nullptr;
+                //     }
+                // }
+                // begin = false;
+                // emit gameStatusChanged(begin);
+                this->setRunning(false);
             }
         }
 
@@ -145,7 +169,7 @@ GameWindowLabel::GameWindowLabel(QWidget *parent) : QLabel(parent)
     });
 
 
-    timerRunning->start(30);  // 控制游戏速度（变速齿轮）初始是30ms一次，包括下落速度、炮弹速度等所有速度
+    timerRunning->start(GAMESPEED);  // 控制游戏速度（变速齿轮）初始是30ms一次，包括下落速度、炮弹速度等所有速度
 
 
     // ===================================设置单词计时器timerStatistic========================================
@@ -159,11 +183,13 @@ GameWindowLabel::GameWindowLabel(QWidget *parent) : QLabel(parent)
         generateWords(level);
 
     });
-    timerStatistic->start(1000);  // 每一秒钟出一个单词（真空期）
+    timerStatistic->start(INTERVAL);  // 每一秒钟出一组单词（真空期）
 }
 
 // =========================================================================================================
 
+
+// 绘图事件：负责绘制页面上的所有图形
 void GameWindowLabel::paintEvent(QPaintEvent *e) {
     Q_UNUSED(e);
     QPainter painter(this);
@@ -191,7 +217,7 @@ void GameWindowLabel::paintEvent(QPaintEvent *e) {
     fireRect.setRight(rect.width() / 2 + 140);
     firePoint = fireRect.center();
 
-    //painter.drawRect(fireRect);
+    // painter.drawRect(fireRect);
 
     QPen pen = painter.pen();
     pen.setWidth(4);
@@ -199,14 +225,15 @@ void GameWindowLabel::paintEvent(QPaintEvent *e) {
 
     gameDeadLine = fireRect.top() - 20;
     painter.setBrush(Qt::lightGray);
-    //painter.drawRect(0, gameDeadLine, rect.width(), 500);
-    //painter.drawLine(0, gameDeadLine, rect.right(), gameDeadLine);
+    painter.drawRect(0, gameDeadLine, rect.width(), 500);
+    painter.drawLine(0, gameDeadLine, rect.right(), gameDeadLine);
 
-    pen.setWidth(4);
+    pen.setWidth(2);
     painter.setPen(pen);
 
+    // painter.drawLine(firePoint, targetPoint);
 
-    //painter.drawLine(firePoint, targetPoint);
+    painter.save();
     QFont font = painter.font();
     font.setFamily("Courier New");
     font.setPixelSize(30);
@@ -215,8 +242,8 @@ void GameWindowLabel::paintEvent(QPaintEvent *e) {
 
     painter.drawRoundedRect(levelRect, 20, 20);
     painter.drawRoundedRect(scoreRect, 20, 20);
-    painter.drawText(levelRect, Qt::AlignCenter, "lvl:" + QString::number(level));
-    painter.drawText(scoreRect, Qt::AlignCenter, QString::number(score));
+    painter.drawText(levelRect, Qt::AlignCenter, "Level:" + QString::number(level));
+    painter.drawText(scoreRect, Qt::AlignCenter, "Score:" + QString::number(score));
 
     font.setPixelSize(40);
     painter.setFont(font);
@@ -288,12 +315,13 @@ void GameWindowLabel::paintEvent(QPaintEvent *e) {
             }
         }
     }
+    painter.restore();
 
     double angle = atan(1.0 * (targetPoint.x() - firePoint.x()) / (firePoint.y() - targetPoint.y()));
 
     painter.save();
     painter.translate(firePoint);
-    painter.rotate(angle * 180 / 3.1415926);
+    painter.rotate(angle * 180 / 3.1415926535);
     QRect rectCannon;
     rectCannon.setTop(0 - cannonLen);
     rectCannon.setBottom(0 + 220);
@@ -306,28 +334,106 @@ void GameWindowLabel::paintEvent(QPaintEvent *e) {
     painter.drawEllipse(fireRect);
 
 
-    if(begin == false) {
-        QRect rectImg = rect;
-        rectImg.setTop(160);
-        rectImg.setBottom(rect.height() - 310);
+    // ========================================绘制游戏封面===============================================
 
-        font.setPixelSize(40);
-        painter.setFont(font);
-        painter.drawText(rect, Qt::AlignCenter,
-                         "请使用标准指法进行打字练习"
-                         "\n\n"
-                         "\n\n"
-                         "\n\n"
-                         "\n\n"
-                         "\n"
-                         "左下角设置难度等级\n"
-                         "同时按下asdf或jkl;开始游戏"
-                         "\n\n");
+    if (this->begin == false) {
+        setFontDefault();
+        // 设置 "CodeAllNight Group Present" 样式
+        QFont smallFont = font;
+        smallFont.setPixelSize(16);  // 小字体
+        painter.setFont(smallFont);
+
+        // 计算 "CodeAllNight Group Present" 文本高度
+        QFontMetrics smallMetrics(smallFont);
+        int smallTextHeight = smallMetrics.height();
+
+        // 绘制 "CodeAllNight Group Present"
+        QRect smallTextRect(rect.left(), rect.top() + 20, rect.width(), smallTextHeight);
+        painter.drawText(smallTextRect, Qt::AlignTop | Qt::AlignHCenter, "CodeAllNight Group Present");
+
+        // 设置 "Signify Strike" 样式
+        QFont boldFont = font;
+        boldFont.setPixelSize(50);  // 大字体
+        boldFont.setBold(true);     // 加粗
+        painter.setFont(boldFont);
+
+        // 计算 "Signify Strike" 文本高度
+        QFontMetrics boldMetrics(boldFont);
+        int boldTextHeight = boldMetrics.height();
+
+        // 绘制带阴影效果的主标题
+        QPen penShadow(Qt::gray);   // 灰色阴影
+        painter.setPen(penShadow);
+
+        QRect boldTextShadowRect(rect.left(), rect.top() + smallTextHeight + 20, rect.width(), boldTextHeight);
+        painter.drawText(boldTextShadowRect.adjusted(2, 2, 2, 2), Qt::AlignHCenter, "Signify Strike");  // 阴影位置略偏
+
+        QPen penMain(Qt::black);    // 黑色主标题
+        painter.setPen(penMain);
+        painter.drawText(boldTextShadowRect, Qt::AlignHCenter, "Signify Strike");
 
         // 启用抗锯齿(反走样)
         painter.setRenderHint(QPainter::Antialiasing, true);
-        // 指定要绘制的图片（将图片路径替换为有效的图片路径）
-        painter.drawPixmap(rectImg, QPixmap(":/type.jpg"));
+
+        // 绘制Logo图片并保持比例
+        logoRect = QRect(rect.left(), rect.top() + smallTextHeight + boldTextHeight + 30, rect.width(), 200);
+        QPixmap pixmap(":/images/images/GameLogo.png");
+        QPixmap scaledPixmap = pixmap.scaled(logoRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        int xOffset = (logoRect.width() - scaledPixmap.width()) / 2;
+        int yOffset = (logoRect.height() - scaledPixmap.height()) / 2;
+        painter.drawPixmap(logoRect.left() + xOffset, logoRect.top() + yOffset, scaledPixmap);
+
+        // 设置 "Game Instruction:" 样式
+        QFont instructionTitleFont = font;
+        instructionTitleFont.setPixelSize(20);  // 增大字号
+        instructionTitleFont.setBold(true);     // 加粗
+        painter.setFont(instructionTitleFont);
+
+        // 计算 "Game Instruction" 的位置并绘制
+        QRect instructionTitleRect(rect.left()+20, rect.top() + smallTextHeight + boldTextHeight + 210, rect.width()-20, 50);
+        painter.drawText(instructionTitleRect, Qt::AlignCenter | Qt::AlignTop, "Game Instruction");
+
+        // 恢复字体样式为普通的说明文字
+        QFont instructionFont = font;
+        instructionFont.setPixelSize(15);       // 普通大小
+        instructionFont.setBold(false);         // 不加粗
+        painter.setFont(instructionFont);
+
+        // 绘制说明文字
+        QRect instructionTextRect(rect.left()+20, rect.top() + smallTextHeight + boldTextHeight + 250, rect.width()-40, 290);
+        painter.drawText(instructionTextRect, Qt::AlignTop | Qt::AlignLeft | Qt::TextWordWrap,
+                         "> In this game, you are manipulating a canon.\n"
+                         "> In order to eliminate the coming enemy word bricks, you need to gesture sign languages in front of the camera.\n"
+                         "> If your gesture is right, the cannon will fire and shoot down the words letter by letter.\n"
+                         "> You will win scores according to the length of the word you shoot down and the level you choose.\n"
+                         "> Your best performance will be seen in the Record Page.\n"
+                         "> You can choose to shoot all words appear on your sight, no order requirement.\n"
+                         "> But to a single word, wrong sequence or wrong gesture will empty your accumulated blow to this word.\n"
+                         "> Feel free to click the pause button in the bottom right corner and go to the Study page to learn when playing.\n"
+                         );
+    }
+
+
+    // =======================================绘制暂停提示页面====================================================
+
+    if (isPaused == true) {
+        quitRect = QRect(10, gameDeadLine - 60, 200, 60);
+
+        QFont font = painter.font();
+        font.setPixelSize(20);  // 设置字体大小
+        painter.setFont(font);
+
+        // 绘制“Game Paused”提示（根据闪烁状态显示）
+        if (showPauseMessage) {
+            painter.setPen(Qt::red);  // 红色字体
+            painter.drawText(quitRect, Qt::AlignLeft, "Game Paused\n※ Click here to QUIT");
+        }
+
+        // 绘制“Feel free to go to the study page”提示（根据闪烁状态显示）
+        if (showStudyMessage) {
+            painter.setPen(Qt::blue);  // 红色字体
+            painter.drawText(QRect(width() - 330, gameDeadLine - 35, 320, 30), Qt::AlignRight, "Feel free to go to the study page!");
+        }
     }
 
 }
@@ -337,22 +443,72 @@ bool GameWindowLabel::isRunning(void) {
 }
 
 void GameWindowLabel::setRunning(bool begin) {
+    this->setFocus();
     this->begin = begin;
-    if(begin) {
+    emit gameStatusChanged(begin);
+    if(this->begin) {
         level = 1;
         score = 0;
         rightCnt = wrongCnt = 0;
+
+        timerRunning->start(GAMESPEED);  // 恢复计时器
+        timerStatistic->start(INTERVAL);
+        // 如果游戏恢复，停止定时器，并确保提示信息不再显示
+        blinkTimer->stop();
 
         cannonLen = 220;
         lockedWord = NULL;
 
         generateWords(level);
+    } else {
+
+        // 保存新的新的最高分============================================
+        QSettings settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
+        // 读取已保存的最高分数，默认为 0
+        int savedHighScore = settings.value("HighScore", 0).toInt();
+        // 比较当前分数和已保存的最高分数
+        if (score > savedHighScore) {
+            // 如果当前分数更高，则将其保存为新的最高分数
+            settings.setValue("HighScore", score);
+
+            // 可以添加一些 UI 提示，如 "新的最高分数!"
+            // qDebug() << "New high score: " << score;
+        } else {
+            // 如果当前分数没有超过最高分数
+            // qDebug() << "Current score: " << score << ", High score: " << savedHighScore;
+        }
+
+        this->score = 0;
+        this->rightCnt = this->wrongCnt = 0;
+
+        this->lockedWord = NULL;
+        this->setPaused(false);
+
+        foreach(EnemyWord *w, wordList)
+        {
+            if(w)
+            {
+                wordList.removeOne(w);
+                delete w;
+                w = nullptr;
+            }
+        }
+
     }
 }
 
+
+void GameWindowLabel::setPaused(bool isPaused) {
+    this->isPaused = isPaused;
+}
+
+
+
+
 void GameWindowLabel::getKey(const QString &c) {
-    if(c == "")
+    if(c == ""){
         return;
+    }
     cannonLen = 200;
     update();
     effect->play();
@@ -482,5 +638,93 @@ void GameWindowLabel::generateWords(int cnt) {
                 return;
             }
         }
+    }
+}
+
+
+void GameWindowLabel::onTogglePause() {
+    if (isPaused) {
+        timerRunning->start(GAMESPEED);  // 恢复计时器
+        timerStatistic->start(INTERVAL);
+        // 如果游戏恢复，停止定时器，并确保提示信息不再显示
+        blinkTimer->stop();
+        showPauseMessage = true;
+        showStudyMessage = true;
+        update();  // 触发重绘
+    } else {
+        timerRunning->stop();  // 暂停计时器
+        timerStatistic->stop();
+        // 如果游戏暂停，启动定时器
+        blinkTimer->start();
+    }
+    isPaused = !isPaused;  // 切换暂停状态
+    // qDebug() << isPaused << begin;
+}
+
+
+void GameWindowLabel::setFontDefault() {
+    // 加载全局默认自定义字体
+    int fontId_regular = QFontDatabase::addApplicationFont(":/HarmonyOS_Sans_TC/HarmonyOS-Sans/HarmonyOS Sans/HarmonyOS_Sans_TC/HarmonyOS_Sans_TC_Regular.ttf");
+
+    if (fontId_regular == -1) {
+        qDebug() << "Failed to load font!";
+    } else {
+        // 获取字体系列名称
+        QString fontFamily_regular = QFontDatabase::applicationFontFamilies(fontId_regular).at(0);
+
+        // 创建 QFont 对象
+        QFont customFont;
+        customFont.setFamily(fontFamily_regular);
+        // customFont.setPixelSize(12);  // 你可以根据需要调整字体大小
+        // customFont.setBold(false);    // 根据需要设置粗体
+
+        // 设置全局字体
+        QApplication::setFont(customFont);
+    }
+}
+
+
+void GameWindowLabel::mousePressEvent(QMouseEvent *event) {
+    // 获取鼠标点击的坐标
+    QPoint clickPos = event->pos();
+
+    // 检查点击是否在 Logo 区域内
+    if (this->begin == false && logoRect.contains(clickPos)) {
+        // 如果点击在Logo内，开始游戏
+        this->setRunning(true);
+    }
+
+    // 检查点击是否在 QUIT 区域内
+    if (this->isPaused == true && quitRect.contains(clickPos)) {
+        // 如果点击在QUIT内，弹窗询问是否要结束游戏，若选择是，则结束游戏
+        showQuitConfirmation();
+
+    }
+    // 如果需要，还可以调用父类的默认事件处理
+    QLabel::mousePressEvent(event);
+}
+
+
+void GameWindowLabel::toggleMessages() {
+    showPauseMessage = !showPauseMessage;  // 切换“Game Paused”显示状态
+    showStudyMessage = !showStudyMessage;  // 切换“Feel free to go to the study page”显示状态
+    update();  // 触发重绘，刷新界面
+}
+
+
+// 显示退出确认弹窗
+void GameWindowLabel::showQuitConfirmation() {
+    // 创建一个 QMessageBox 问题对话框
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Confirm Quit", "Are you sure you want to quit the game? \nYour best performance will be saved to the Record page.",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    // 根据用户的选择执行不同操作
+    if (reply == QMessageBox::Yes) {
+        // 如果用户选择“是”，退出游戏
+        this->setRunning(false);
+    } else {
+        // 如果用户选择“否”，关闭弹窗，继续游戏
+        // QMessageBox::question 是模态的，自动关闭，无需手动处理
     }
 }
