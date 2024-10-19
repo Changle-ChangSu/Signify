@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>images/Central.png</file>
+        <file>images/GamePage.png</file>
+        <file>images/GameLogo.png</file>
+    </qresource>
+    <qresource prefix="/image">
+        <file>image/A.png</file>
+        <file>image/B.png</file>
+        <file>image/C.png</file>
+        <file>image/D.png</file>
+        <file>image/E.png</file>
+        <file>image/F.png</file>
+        <file>image/G.png</file>
+        <file>image/H.png</file>
+        <file>image/I.png</file>
+        <file>image/J.png</file>
+        <file>image/K.png</file>
+        <file>image/L.png</file>
+        <file>image/M.png</file>
+        <file>image/N.png</file>
+        <file>image/O.png</file>
+        <file>image/P.png</file>
+        <file>image/Q.png</file>
+        <file>image/R.png</file>
+        <file>image/S.png</file>
+        <file>image/T.png</file>
+        <file>image/U.png</file>
+        <file>image/V.png</file>
+        <file>image/W.png</file>
+        <file>image/X.png</file>
+        <file>image/Y.png</file>
+        <file>image/Z.png</file>
+    </qresource>
+</RCC>

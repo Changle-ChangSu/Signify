@@ -17,10 +17,13 @@ class GameWidget : public QWidget
     Q_OBJECT
 
     QGridLayout *layout;  // 用于管理窗口中控件的布局，QGridLayout 允许将控件排列在网格中
-    GameWindowLabel *lblGameWindow;  // 用于显示游戏内容的区域
+    GameWindowLabel *lblGameWindow;  // 用于显示游戏内容的区域，说明GameWidget是GameWindowLabel的父对象
     QSpinBox *spinMaxLvl;  // 用于用户选择游戏的最大关卡数的控件（左下角的等级选择）
     QLabel *lblStatistics;  // 用于显示游戏统计信息的标签（右下角的统计信息展示）
-    QPushButton *backbutton;  // 用于返回到主界面
+    QPushButton *backbutton;  // 用于返回到主界面（已经废弃，不注释防止奇妙报错）
+    QPushButton *pauseButton;  // 用于暂停游戏
+    QPushButton *resumeButton; // 用于暂停游戏之后继续游戏
+    QPushButton *quitButton; // 用于暂停游戏之后结束游戏
 
     // 用于存储键盘按键的状态。这个数组可能用于检测和处理多按键的输入，例如某些游戏中会同时检测多个按键的按下与松开
     bool keyPressFlag[8];
@@ -43,10 +46,13 @@ protected:
     void keyReleaseEvent(QKeyEvent *ev) override;
 
 signals:
-    void backClicked();  // 返回按钮点击信号
+    void backClicked();  // 返回按钮点击信号（已废弃）
+    void togglePause();  // 用于发出暂停信号
 
 private slots:
-    void goBack();  // 返回槽函数
+    void goBack();  // 返回槽函数（已废弃）
+    void onGameStatusChanged(bool isStarted);
+
 
 };
 #endif // GameWidget_H

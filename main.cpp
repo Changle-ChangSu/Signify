@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include <QFontDatabase>
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +18,26 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
+    // 加载全局默认自定义字体
+    int fontId_regular = QFontDatabase::addApplicationFont(":/HarmonyOS_Sans_TC/HarmonyOS-Sans/HarmonyOS Sans/HarmonyOS_Sans_TC/HarmonyOS_Sans_TC_Regular.ttf");
+
+    if (fontId_regular == -1) {
+        qDebug() << "Failed to load font!";
+    } else {
+        // 获取字体系列名称
+        QString fontFamily_regular = QFontDatabase::applicationFontFamilies(fontId_regular).at(0);
+
+        // 创建 QFont 对象
+        QFont customFont;
+        customFont.setFamily(fontFamily_regular);
+        // customFont.setPixelSize(12);  // 你可以根据需要调整字体大小
+        // customFont.setBold(false);    // 根据需要设置粗体
+
+        // 设置全局字体
+        QApplication::setFont(customFont);
+    }
+
     MainWindow w;
     w.show();
     return a.exec();

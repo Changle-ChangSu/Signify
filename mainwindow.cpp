@@ -12,11 +12,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 创建 HomePage 和 GameWidget
     homePage = new HomePage(this);
+    welcomePage = new Welcome(this); // 创建 Welcome 页面
     studyWidget = new StudyWidget(this);
     gameWidget = new GameWidget(this); // GameWidget 现在不需要传递HomePage
 
     // 将 HomePage 和 GameWidget 添加到 QStackedWidget 中
     stackedWidget->addWidget(homePage);   // 页面 0
+    stackedWidget->addWidget(welcomePage); // 页面 3
     stackedWidget->addWidget(studyWidget);
     stackedWidget->addWidget(gameWidget); // 页面 1
 
@@ -26,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     // setLayout(layout);
 
     // 设置初始显示为 PracticePage（后续更改一下）默认打开是哪个页面就写这里，下面还要确定哪个按钮checked
-    stackedWidget->setCurrentWidget(gameWidget);
+    stackedWidget->setCurrentWidget(welcomePage);
 
     // =====================================创建左侧的导航栏==================================================
 
@@ -41,10 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
     // btnHome = new QPushButton("Home", this);
     // navLayout->addWidget(btnHome);
 
-    // Study按钮 ==============================================
-    btnStudy = new QPushButton("Study", this);
-    btnStudy->setCheckable(true);  // 设置为可选中按钮
-    btnStudy->setStyleSheet(
+    // Welcome按钮
+    btnWelcome = new QPushButton("Welcome", this);
+    btnWelcome->setCheckable(true);
+    btnWelcome->setStyleSheet(
         "QPushButton {"
         "background-color: transparent;"
         "color: #737B89;"
@@ -61,6 +63,22 @@ MainWindow::MainWindow(QWidget *parent)
         "color: white;"
         "}"
         );
+    btnWelcome->setIcon(QIcon(":/navigator_icons/icons/welcome_icon_gray.png"));
+    connect(btnWelcome, &QPushButton::toggled, [=](bool checked){
+        if (checked) {
+            btnWelcome->setIcon(QIcon(":/navigator_icons/icons/welcome_icon_white.png"));
+        } else {
+            btnWelcome->setIcon(QIcon(":/navigator_icons/icons/welcome_icon_gray.png"));
+        }
+    });
+    btnWelcome->setIconSize(QSize(20, 20));
+    btnWelcome->setFixedHeight(50);  // 固定按钮高度
+    navLayout->addWidget(btnWelcome);
+
+    // Study按钮 ==============================================
+    btnStudy = new QPushButton("Study", this);
+    btnStudy->setCheckable(true);  // 设置为可选中按钮
+    btnStudy->setStyleSheet(btnWelcome->styleSheet());
     btnStudy->setIcon(QIcon(":/navigator_icons/icons/study_icon_gray.png"));  // 添加图标
     // 当选中和未选中时改变图标
     connect(btnStudy, &QPushButton::toggled, [=](bool checked){
@@ -72,15 +90,14 @@ MainWindow::MainWindow(QWidget *parent)
             btnStudy->setIcon(QIcon(":/navigator_icons/icons/study_icon_gray.png"));
         }
     });
-    btnStudy->setIconSize(QSize(20, 20));
-    btnStudy->setFixedHeight(50);  // 固定按钮高度
+    btnStudy->setIconSize(btnWelcome->iconSize());
+    btnStudy->setFixedHeight(btnWelcome->height());  // 固定按钮高度
     navLayout->addWidget(btnStudy);
-
 
     // Game按钮，复用Study按钮的stylesheet ==================================================
     btnGame = new QPushButton("Game", this);
     btnGame->setCheckable(true);  // 设置为可选中按钮
-    btnGame->setStyleSheet(btnStudy->styleSheet());
+    btnGame->setStyleSheet(btnWelcome->styleSheet());
     btnGame->setIcon(QIcon(":/navigator_icons/icons/game_icon_gray.png"));  // 添加图标
     // 当选中和未选中时改变图标
     connect(btnGame, &QPushButton::toggled, [=](bool checked){
@@ -92,15 +109,14 @@ MainWindow::MainWindow(QWidget *parent)
             btnGame->setIcon(QIcon(":/navigator_icons/icons/game_icon_gray.png"));
         }
     });
-    btnGame->setIconSize(btnStudy->iconSize());
-    btnGame->setFixedHeight(btnStudy->height());  // 固定按钮高度
+    btnGame->setIconSize(btnWelcome->iconSize());
+    btnGame->setFixedHeight(btnWelcome->height());  // 固定按钮高度
     navLayout->addWidget(btnGame);
-
 
     // Record按钮，复用Study按钮的stylesheet =========================================
     btnRecord = new QPushButton("Record", this);
     btnRecord->setCheckable(true);  // 设置为可选中按钮
-    btnRecord->setStyleSheet(btnStudy->styleSheet());
+    btnRecord->setStyleSheet(btnWelcome->styleSheet());
     btnRecord->setIcon(QIcon(":/navigator_icons/icons/record_icon_gray.png"));  // 添加图标
     // 当选中和未选中时改变图标
     connect(btnRecord, &QPushButton::toggled, [=](bool checked){
@@ -112,8 +128,8 @@ MainWindow::MainWindow(QWidget *parent)
             btnRecord->setIcon(QIcon(":/navigator_icons/icons/record_icon_gray.png"));
         }
     });
-    btnRecord->setIconSize(btnStudy->iconSize());
-    btnRecord->setFixedHeight(btnStudy->height());  // 固定按钮高度
+    btnRecord->setIconSize(btnWelcome->iconSize());
+    btnRecord->setFixedHeight(btnWelcome->height());  // 固定按钮高度
     navLayout->addWidget(btnRecord);
 
     navLayout->addStretch(); // 将控件推到上方
@@ -123,12 +139,13 @@ MainWindow::MainWindow(QWidget *parent)
     btnGroup->setExclusive(true);  // 互斥模式，保证只能选中一个按钮
 
     // 将按钮添加到按钮组
+    btnGroup->addButton(btnWelcome); // 将 Welcome 按钮添加到按钮组
     btnGroup->addButton(btnStudy);
     btnGroup->addButton(btnGame);
     btnGroup->addButton(btnRecord);
 
-    // 设置默认选中 "Game" 按钮
-    btnGame->setChecked(true);  // 默认打开是哪个页面就写这里
+    // 设置默认选中 "Welcome" 按钮
+    btnWelcome->setChecked(true);  // 默认打开是哪个页面就写这里
 
     // 创建主布局，水平布局
     mainLayout = new QHBoxLayout(this);
@@ -146,6 +163,7 @@ MainWindow::MainWindow(QWidget *parent)
     // connect(btnHome, &QPushButton::clicked, this, &MainWindow::showHomePage);
     connect(btnStudy, &QPushButton::clicked, this, &MainWindow::showStudyPage);
     connect(btnGame, &QPushButton::clicked, this, &MainWindow::showGamePage);
+    connect(btnWelcome, &QPushButton::clicked, this, &MainWindow::showWelcomePage); // 连接 Welcome 按钮
 }
 
 
@@ -187,6 +205,11 @@ void MainWindow::showGamePage()
     // 切换到 GameWidget
     stackedWidget->setCurrentWidget(gameWidget);
     gameWidget->setFocus();
+}
+
+void MainWindow::showWelcomePage() {
+    stackedWidget->setCurrentWidget(welcomePage); // 切换到 Welcome 页面
+    welcomePage->setFocus();
 }
 
 
