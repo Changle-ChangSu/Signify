@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>user.jpg</file>
+        <file>weibo.png</file>
+        <file>tiktok.png</file>
+        <file>facebook.png</file>
+        <file>instagram.png</file>
+        <file>learn.png</file>
+        <file>score.png</file>
+    </qresource>
+</RCC>
