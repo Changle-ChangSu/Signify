@@ -6,17 +6,29 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
 
+# # 设置 ONNX Runtime 安装路径
+# ONNX_RUNTIME_PATH = D:/onnxruntime
+# # 包含 ONNX Runtime 头文件
+# INCLUDEPATH += $${ONNX_RUNTIME_PATH}/include
+# # 链接 ONNX Runtime 库
+# LIBS += -L$${ONNX_RUNTIME_PATH}/lib \
+#         -lonnxruntime
+
+
+
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    camaradetection.cpp \
     cannonball.cpp \
     enemyword.cpp \
     gamewidget.cpp \
     gamewindowlabel.cpp \
     homepage.cpp \
     mainwindow.cpp\
+    recordwidget.cpp \
     studywidget.cpp \
     welcome.cpp \
     main.cpp \
@@ -29,6 +41,7 @@ HEADERS += \
     gamewindowlabel.h \
     homepage.h \
     mainwindow.h \
+    recordwidget.h \
     studywidget.h \
     welcome.h
 

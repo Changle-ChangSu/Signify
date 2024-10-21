@@ -1,7 +1,5 @@
 #include "studywidget.h"
 #include <QPushButton>
-#include <QCamera>
-#include <QVideoWidget>
 #include <QVBoxLayout>
 #include <QListWidgetItem>
 #include <QLabel>
@@ -14,55 +12,32 @@ StudyWidget::StudyWidget(QWidget *parent)
     layout = new QGridLayout(this);
 
     // 初始化字母對應的說明
-    letterDescriptions["A"] = "這是字母 A 的說明...";
-    letterDescriptions["B"] = "這是字母 B 的說明...";
-    letterDescriptions["C"] = "這是字母 C 的說明...";
-    letterDescriptions["D"] = "這是字母 D 的說明...";
-    letterDescriptions["E"] = "這是字母 E 的說明...";
-    letterDescriptions["F"] = "這是字母 F 的說明...";
-    letterDescriptions["G"] = "這是字母 G 的說明...";
-    letterDescriptions["H"] = "這是字母 H 的說明...";
-    letterDescriptions["I"] = "這是字母 I 的說明...";
-    letterDescriptions["J"] = "這是字母 J 的說明...";
-    letterDescriptions["K"] = "這是字母 K 的說明...";
-    letterDescriptions["L"] = "這是字母 L 的說明...";
-    letterDescriptions["M"] = "這是字母 M 的說明...";
-    letterDescriptions["N"] = "這是字母 N 的說明...";
-    letterDescriptions["O"] = "這是字母 O 的說明...";
-    letterDescriptions["P"] = "這是字母 P 的說明...";
-    letterDescriptions["Q"] = "這是字母 Q 的說明...";
-    letterDescriptions["R"] = "這是字母 R 的說明...";
-    letterDescriptions["S"] = "這是字母 S 的說明...";
-    letterDescriptions["T"] = "這是字母 T 的說明...";
-    letterDescriptions["U"] = "這是字母 U 的說明...";
-    letterDescriptions["V"] = "這是字母 V 的說明...";
-    letterDescriptions["W"] = "這是字母 W 的說明...";
-    letterDescriptions["X"] = "這是字母 X 的說明...";
-    letterDescriptions["Y"] = "這是字母 Y 的說明...";
-    letterDescriptions["Z"] = "這是字母 Z 的說明...";
-
-
-    // 創建 Start 按鈕
-    startButton = new QPushButton("Start", this);
-    startButton->setFixedSize(200, 100);
-    startButton->setStyleSheet("QPushButton {"
-                               "background-color: #FF5555;"
-                               "color: white;"
-                               "border-radius: 10px;"
-                               "font-size: 18px;"
-                               "padding: 10px;"
-                               "}"
-                               "QPushButton:hover {"
-                               "background-color: #FF7777;"
-                               "}");
-
-    // 把按鈕添加到佈局
-    layout->addWidget(startButton, 0, 0, 1, 2, Qt::AlignCenter);  // 佈局中占據整行
-
-    setLayout(layout);
-    setWindowTitle("Signify");
-    setFixedSize(810, 720);
-    this->setStyleSheet("background-color: #2E3440;");  // 窗口背景
+    letterDescriptions["A"] = "Make a fist with the thumb resting on the side of the other fingers.";
+    letterDescriptions["B"] = "Hold the palm outward with the four fingers extended together and the thumb bent across the palm.";
+    letterDescriptions["C"] = "Curve your fingers and palm to form the shape of the letter C facing outward.";
+    letterDescriptions["D"] = "Extend the index finger upward while the other fingers form a fist with the thumb resting over the bent middle and ring fingers.";
+    letterDescriptions["E"] = "Curl the fingers into a fist with the fingertips touching the palm, and place the thumb over the front of the fingers.";
+    letterDescriptions["F"] = "Touch the thumb and index finger to form a circle, while the other three fingers are extended straight outward.";
+    letterDescriptions["G"] = "Extend the index finger and thumb parallel to the ground, with the other fingers curled in.";
+    letterDescriptions["H"] = "Extend the index and middle fingers together while the palm faces inward and the remaining fingers form a fist.";
+    letterDescriptions["I"] = "Extend the pinky finger while the other fingers are in a fist, with the thumb resting on the side of the fist.";
+    letterDescriptions["J"] = "Extend the pinky finger and curve it downward in a J motion, while the other fingers form a fist.";
+    letterDescriptions["K"] = "Extend the index and middle fingers together, with the thumb resting between them, while the other fingers form a fist.";
+    letterDescriptions["L"] = "Extend the thumb and index finger to form the shape of the letter L, while the other fingers are curled in.";
+    letterDescriptions["M"] = "Form a fist, with the thumb tucked under the three fingers (index, middle, and ring fingers).";
+    letterDescriptions["N"] = "Form a fist, with the thumb tucked under two fingers (index and middle fingers).";
+    letterDescriptions["O"] = "Curve all fingers so that the fingertips touch, forming the shape of the letter O.";
+    letterDescriptions["P"] = "Touch the thumb and index finger together at the tips, with the middle finger extended downward and the other fingers curled in.";
+    letterDescriptions["Q"] = "Form a circle with the thumb and index finger, and extend the middle finger forward, while the other fingers are curled in.";
+    letterDescriptions["R"] = "Cross the index and middle fingers, with the remaining fingers curled into a fist.";
+    letterDescriptions["S"] = "Form a fist with the thumb resting over the front of the bent fingers.";
+    letterDescriptions["T"] = "Form a fist with the thumb tucked between the index and middle fingers.";
+    letterDescriptions["U"] = "Extend the index and middle fingers together, with the remaining fingers curled into a fist.";
+    letterDescriptions["V"] = "Extend the index and middle fingers in a V shape, while the remaining fingers form a fist.";
+    letterDescriptions["W"] = "Extend the index, middle, and ring fingers, spreading them apart, while the thumb and pinky are curled in.";
+    letterDescriptions["X"] = "Curl the index finger to form a hook shape, while the remaining fingers form a fist.";
+    letterDescriptions["Y"] = "Extend the pinky and thumb, while the other fingers are curled into the palm.";
+    letterDescriptions["Z"] = "Extend the index finger and draw the shape of the letter Z in the air.";
 
     // 創建其他控件
     imageLabel = new QLabel(this);
@@ -71,27 +46,43 @@ StudyWidget::StudyWidget(QWidget *parent)
     descriptionLabel = new QLabel(this);
     descriptionLabel->setAlignment(Qt::AlignCenter);  // 描述居中
     descriptionLabel->setStyleSheet("color: white; font-size: 16px;");
+    descriptionLabel->setFixedSize(500, 120);  // 设置固定大小，宽度600，高度120
+    descriptionLabel->setWordWrap(true);  // 启用自动换行
+
 
     letterMenu = new QListWidget(this);
-    letterMenu->setFixedWidth(200);  // 將字母選單寬度設為120
-    letterMenu->setVisible(false);  // 初始隱藏字母選單
+    letterMenu->setFixedWidth(200);  // 将字母栏宽度调整为150
+    letterMenu->setFixedHeight(400); // 限制字母栏的高度
+    letterMenu->setVisible(true);
 
-    // 創建 NEXT 按鈕
+    // 創建 NEXT 和 LAST 按鈕
     nextButton = new QPushButton("NEXT", this);
-    nextButton->setVisible(false);  // 初始隱藏 NEXT 按鈕
-    nextButton->setFixedWidth(120);  // NEXT 按鈕寬度與字母選單一致
+    nextButton->setFixedSize(150, 60);  // 调整按钮尺寸
     nextButton->setStyleSheet("QPushButton {"
                               "background-color: #88C0D0;"
                               "color: white;"
                               "border-radius: 10px;"
                               "font-size: 16px;"
-                              "padding: 10px;"  // 按鈕內邊距
+                              "padding: 10px;"
+                              "}");
+
+    lastButton = new QPushButton("Previous", this);
+    lastButton->setFixedSize(150, 60);  // 调整按钮尺寸
+    lastButton->setStyleSheet("QPushButton {"
+                              "background-color: #88C0D0;"
+                              "color: white;"
+                              "border-radius: 10px;"
+                              "font-size: 16px;"
+                              "padding: 10px;"
                               "}");
 
     // 添加字母到選單
     QStringList letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     for (const QString &letter : letters) {
-        letterMenu->addItem(new QListWidgetItem(letter));
+        QListWidgetItem *item = new QListWidgetItem(letter, letterMenu);
+        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);  // 启用复选框
+        item->setCheckState(Qt::Unchecked);  // 复选框初始为未选中
+        letterMenu->addItem(item);
     }
 
     // 美化字母選單
@@ -100,34 +91,56 @@ StudyWidget::StudyWidget(QWidget *parent)
                               "border: 1px solid #D8DEE9;"
                               "border-radius: 5px;"
                               "color: white;"
-                              "font-size: 16px;"
+                              "font-size: 24px;"  // 字母字体大小设为24px
                               "padding: 10px;"
+                              "margin-left: 15px;"  // 调整字母栏距离左边的距离
                               "}"
                               "QListWidget::item:selected {"
                               "background-color: #88C0D0;"
                               "color: black;"
                               "}");
 
+    descriptionLabel->setStyleSheet("QLabel {"
+                                    "border: 2px solid #88C0D0;"  // 边框颜色和粗细
+                                    "border-radius: 10px;"        // 圆角边框
+                                    "background-color: #4C566A;"  // 背景颜色
+                                    "color: white;"               // 文本颜色
+                                    "padding: 10px;"              // 内边距，避免文字紧贴边框
+                                    "font-size: 16px;"            // 字体大小
+                                    "}");
+
+
+    // 預設顯示字母 A
+    layout->addWidget(imageLabel, 0, 0, 1, 1, Qt::AlignCenter);  // 圖片
+    layout->addWidget(descriptionLabel, 1, 0, 1, 1, Qt::AlignCenter);  // 說明
+    layout->addWidget(letterMenu, 0, 1, 2, 1, Qt::AlignRight);  // 字母选单向左并垂直居中
+
+    // 将 LAST 和 NEXT 按钮放在字母栏下方，横向排列
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(lastButton);
+    buttonLayout->addWidget(nextButton);
+
+    layout->addLayout(buttonLayout, 2, 1, Qt::AlignCenter);  // 按钮横向居中排列在字母栏下方
+
+    setLayout(layout);
+    setWindowTitle("Signify");
+    setFixedSize(810, 720);
+    this->setStyleSheet("background-color: #2E3440;");  // 窗口背景
+
     // 信號槽
     connect(letterMenu, &QListWidget::itemClicked, this, &StudyWidget::showLetterPage);
-    connect(startButton, &QPushButton::clicked, this, [=]() {
-        openCameraWindow();
-        layout->removeWidget(startButton);
-        startButton->deleteLater();
 
-        // 顯示字母選單與 NEXT 按鈕
-        letterMenu->setVisible(true);
-        nextButton->setVisible(true);
-
-        // 調整圖片居中，字母選單在右側，NEXT 按鈕在下方
-        layout->addWidget(imageLabel, 0, 0, 1, 1, Qt::AlignCenter);  // 第一列
-        layout->addWidget(descriptionLabel, 1, 0, 1, 1, Qt::AlignCenter);  // 第二列
-        layout->addWidget(letterMenu, 0, 1, 2, 1, Qt::AlignRight);  // 字母選單居右
-        layout->addWidget(nextButton, 2, 1, Qt::AlignCenter);  // NEXT 按鈕居中
-
-        // 預設顯示字母 A
-        showLetterPage(letterMenu->item(0));
+    // 监听复选框的点击
+    connect(letterMenu, &QListWidget::itemChanged, this, [=](QListWidgetItem *item) {
+        if (item->checkState() == Qt::Checked) {
+            qDebug() << item->text() << " 已被打勾";
+        } else {
+            qDebug() << item->text() << " 未被打勾";
+        }
     });
+
+    // 顯示預設字母 A
+    showLetterPage(letterMenu->item(0));
 
     // NEXT 按鈕點擊後顯示下一個字母
     connect(nextButton, &QPushButton::clicked, this, [=]() {
@@ -137,32 +150,18 @@ StudyWidget::StudyWidget(QWidget *parent)
             showLetterPage(letterMenu->currentItem());
         }
     });
+
+    // LAST 按鈕點擊後顯示上一個字母
+    connect(lastButton, &QPushButton::clicked, this, [=]() {
+        int currentRow = letterMenu->currentRow();
+        if (currentRow > 0) {
+            letterMenu->setCurrentRow(currentRow - 1);
+            showLetterPage(letterMenu->currentItem());
+        }
+    });
 }
 
 StudyWidget::~StudyWidget() {}
-
-void StudyWidget::openCameraWindow()
-{
-    // 創建顯示攝像頭的窗口
-    QWidget *cameraWindow = new QWidget;
-    cameraWindow->setWindowTitle("Camera View");
-    cameraWindow->setFixedSize(640, 480);
-
-    QVideoWidget *videoWidget = new QVideoWidget(cameraWindow);
-    QVBoxLayout *cameraLayout = new QVBoxLayout(cameraWindow);
-    cameraLayout->addWidget(videoWidget);
-
-    QCamera *camera = new QCamera(this);
-
-    // 設置攝像頭輸出
-    captureSession.setCamera(camera);
-    captureSession.setVideoOutput(videoWidget);
-
-    // 開始捕獲
-    camera->start();
-    cameraWindow->setLayout(cameraLayout);
-    cameraWindow->show();
-}
 
 void StudyWidget::showLetterPage(QListWidgetItem *item)
 {

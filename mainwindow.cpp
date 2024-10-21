@@ -15,12 +15,14 @@ MainWindow::MainWindow(QWidget *parent)
     welcomePage = new Welcome(this); // 创建 Welcome 页面
     studyWidget = new StudyWidget(this);
     gameWidget = new GameWidget(this); // GameWidget 现在不需要传递HomePage
+    recordWidget = new RecordWidget(this);
 
     // 将 HomePage 和 GameWidget 添加到 QStackedWidget 中
     stackedWidget->addWidget(homePage);   // 页面 0
     stackedWidget->addWidget(welcomePage); // 页面 3
     stackedWidget->addWidget(studyWidget);
     stackedWidget->addWidget(gameWidget); // 页面 1
+    stackedWidget->addWidget(recordWidget);
 
     // // 设置布局
     // QVBoxLayout *layout = new QVBoxLayout(this);
@@ -164,6 +166,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(btnStudy, &QPushButton::clicked, this, &MainWindow::showStudyPage);
     connect(btnGame, &QPushButton::clicked, this, &MainWindow::showGamePage);
     connect(btnWelcome, &QPushButton::clicked, this, &MainWindow::showWelcomePage); // 连接 Welcome 按钮
+    connect(btnRecord, &QPushButton::clicked, this, &MainWindow::showRecordPage); // 连接 Record 按钮
 }
 
 
@@ -210,6 +213,12 @@ void MainWindow::showGamePage()
 void MainWindow::showWelcomePage() {
     stackedWidget->setCurrentWidget(welcomePage); // 切换到 Welcome 页面
     welcomePage->setFocus();
+}
+
+
+void MainWindow::showRecordPage() {
+    stackedWidget->setCurrentWidget(recordWidget); // 切换到 Record 页面
+    recordWidget->setFocus();
 }
 
 

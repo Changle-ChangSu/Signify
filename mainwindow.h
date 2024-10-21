@@ -11,6 +11,7 @@
 #include "gamewidget.h"
 #include "studywidget.h"
 #include "welcome.h"  // 确保包含 Welcome 的头文件
+#include "recordwidget.h"
 
 class MainWindow : public QWidget
 {
@@ -34,7 +35,7 @@ private slots:
     void showHomePage();      // 显示HomePage页面（即将弃用）
     void showStudyPage();  // 显示Study页面
     void showGamePage();  // 显示Practice页面
-    // void showPersonalRecordPage();  // 显示Personal Record页面
+    void showRecordPage();  // 显示Record页面
 
 
 private:
@@ -45,7 +46,7 @@ private:
     HomePage *homePage;
     StudyWidget *studyWidget;
     GameWidget *gameWidget;
-    // Personal Record 页面定义
+    RecordWidget *recordWidget;
 
     QPushButton *btnWelcome; // 添加 Welcome 按钮
     QPushButton *btnHome;  // 测试用，将弃用

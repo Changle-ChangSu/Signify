@@ -3,7 +3,7 @@
 
 Welcome::Welcome(QWidget *parent) : QWidget(parent) {
     setWindowTitle("Welcome Page");
-    setFixedSize(800, 600); // 设置固定大小
+    setFixedSize(810, 720); // 设置固定大小
 
     // 创建布局
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -29,7 +29,7 @@ Welcome::Welcome(QWidget *parent) : QWidget(parent) {
     lblDescription->setAlignment(Qt::AlignCenter);
     lblDescription->setWordWrap(true); // 允许文本换行
     lblDescription->setStyleSheet("font-size: 18px;");
-    lblDescription->setMinimumWidth(600); // 设置最小宽度
+    lblDescription->setMinimumWidth(640); // 设置最小宽度
     layout->addWidget(lblDescription);
 
 
@@ -38,7 +38,7 @@ Welcome::Welcome(QWidget *parent) : QWidget(parent) {
     lblInstruction->setAlignment(Qt::AlignCenter);
     lblInstruction->setWordWrap(true); // 允许文本换行
     lblInstruction->setStyleSheet("font-size: 18px;");
-    lblInstruction->setMinimumWidth(600); // 设置最小宽度
+    lblInstruction->setMinimumWidth(640); // 设置最小宽度
     layout->addWidget(lblInstruction);
 
     // // 添加垫片
@@ -81,7 +81,7 @@ void Welcome::openCameraWindow()
     // 创建一个新窗口，用于显示摄像头
     QWidget *cameraWindow = new QWidget;
     cameraWindow->setWindowTitle("Camera View");
-    cameraWindow->setFixedSize(200, 150);
+    cameraWindow->setFixedSize(400, 300);
 
     // 创建视频小部件（用于替代 QCameraViewfinder）
     QVideoWidget *videoWidget = new QVideoWidget(cameraWindow);
@@ -102,4 +102,10 @@ void Welcome::openCameraWindow()
     // 显示摄像头窗口
     cameraWindow->setLayout(cameraLayout);
     cameraWindow->show();
+
+    // 处理窗口关闭事件，关闭窗口时关闭摄像头
+    connect(cameraWindow, &QWidget::destroyed, this, [=]() {
+        camera->stop();
+        delete camera;
+    });
 }

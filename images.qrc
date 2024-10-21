@@ -32,4 +32,13 @@
         <file>image/Y.png</file>
         <file>image/Z.png</file>
     </qresource>
+    <qresource prefix="/record">
+        <file>recordImage/facebook.png</file>
+        <file>recordImage/instagram.png</file>
+        <file>recordImage/learn.png</file>
+        <file>recordImage/score.png</file>
+        <file>recordImage/tiktok.png</file>
+        <file>recordImage/user.jpg</file>
+        <file>recordImage/weibo.png</file>
+    </qresource>
 </RCC>

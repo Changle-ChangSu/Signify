@@ -20,7 +20,7 @@ public:
     ~StudyWidget();
 
 private slots:
-    void openCameraWindow(); // 添加攝像頭窗口的槽函數
+    // void openCameraWindow(); // 添加攝像頭窗口的槽函數
     void showLetterPage(QListWidgetItem *item);  // 显示字母页面
 
 private:
@@ -33,6 +33,7 @@ private:
     QListWidget *letterMenu;  // 滚动字母菜
     QPushButton *startButton;
     QPushButton *nextButton;
+    QPushButton *lastButton;
     QMap<QString, QString> letterDescriptions;  // 儲存字母與說明的映射
 };
 
