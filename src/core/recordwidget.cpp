@@ -18,18 +18,16 @@ RecordWidget::RecordWidget(QWidget *parent)
     // ---------------------------profile photo ------------------------------
     QHBoxLayout *userLayout = new QHBoxLayout();
     QLabel *avatar = new QLabel(this);
-    QPixmap avatarPixmap(":/record/images/record/user.png");
-
+    QPixmap avatarPixmap(":/record/images/record/user.jpg");
     avatarPixmap = avatarPixmap.scaled(148, 148, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     QBitmap mask(148, 148);
     mask.fill(Qt::color0);
     QPainter painter(&mask);
-    painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(Qt::color1);
     painter.drawEllipse(0, 0, 148, 148);
-    avatarPixmap.setMask(mask);
 
+    avatarPixmap.setMask(mask);
     avatar->setPixmap(avatarPixmap);
     avatar->setFixedSize(148, 148);
 

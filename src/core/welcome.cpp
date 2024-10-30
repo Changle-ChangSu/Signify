@@ -93,6 +93,7 @@ Welcome::Welcome(QWidget *parent)
     setLayout(layout);
 
     process = new QProcess(this);
+    program = QCoreApplication::applicationDirPath() + "/model/dist/model/model.exe";
 }
 
 
@@ -111,7 +112,7 @@ void Welcome::openCameraWindow() {
     } else {
         QMessageBox msgBox;
         msgBox.setWindowTitle("Notice");
-        msgBox.setText("Please switch to the camera interface and press 'q' to close it before closing the application.");
+        msgBox.setText("To close the camera, please switch to the camera interface and press 'q'.");
         // msgBox.setInformativeText("Note: If you successfully run the model.py file, click OK to proceed. If nothing goes wrong, the camara will be automatically turned on.");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Information);
@@ -132,14 +133,15 @@ void Welcome::openDeveloperMode() {
     if (process->state() == QProcess::Running) {
         QMessageBox msgBox;
         msgBox.setWindowTitle("Model is Running");
-        msgBox.setText("The gesture recognition model is running. The model cannot be started repeatedly");
+        msgBox.setText("The gesture recognition model is running. The model cannot be started repeatedly.");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.exec();
     } else {
+        QString pyProgram = QCoreApplication::applicationDirPath() + "/model/model.py";
         QMessageBox msgBox;
         msgBox.setWindowTitle("Developer Mode Manual Start Instruction");
-        msgBox.setText("For testing: Start the gesture recognition model in a manual way by opening model.py with the Python compiler as long as you have setting up the environment.");
+        msgBox.setText(QString("For testing: \nMake sure you have already set an environment of Python 3.12.7 complier, and have installed opencv and ultralytics packages. \n\nAfter clicking the OK button below, open '%1' and run the program under the environmet you have set.").arg(pyProgram));
         // msgBox.setInformativeText("Note: If you successfully run the model.py file, click OK to proceed. If nothing goes wrong, the camara will be automatically turned on.");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Information);
@@ -165,10 +167,6 @@ void Welcome::startModelProcessInMainThread() {
     dialog->setLayout(layout);
     dialog->setWindowModality(Qt::WindowModal);  // Set modal window
     dialog->show();
-
-    // Build the relative path to model.exe based on the application's directory
-    QString program = QCoreApplication::applicationDirPath() + "/model/dist/model/model.exe";
-    // qDebug() << program;
 
     process = new QProcess(this); // Ensure process is initialized before connecting signals
 
