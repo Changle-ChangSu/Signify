@@ -111,7 +111,7 @@ void Welcome::openCameraWindow() {
         msgBox.exec();
     } else {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Notice");
+        msgBox.setWindowTitle("Camera Notice");
         msgBox.setText("To close the camera, please switch to the camera interface and press 'q'.");
         // msgBox.setInformativeText("Note: If you successfully run the model.py file, click OK to proceed. If nothing goes wrong, the camara will be automatically turned on.");
         msgBox.setStandardButtons(QMessageBox::Ok);

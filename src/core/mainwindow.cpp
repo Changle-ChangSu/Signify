@@ -403,9 +403,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         QMessageBox msgBox;
         msgBox.setWindowTitle("Program Still Running");
         msgBox.setText("The model.exe process is still running.\n"
-                       "Please switch to the camera interface and press 'q' to close it"
+                       "Please switch to the camera interface and press 'q' to close it "
                        "before trying to close this application again.");
-        msgBox.setInformativeText("Note: The model may take up to 30 seconds to shut down completely. \n"
+        msgBox.setInformativeText("Note: The model may take up several seconds to shut down completely. \n"
                                   "If this message appears again, please be patient and retry after waiting.");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
