@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/HamonyOS">
+        <file>fonts/HarmonyOS Sans/HarmonyOS_Sans_TC/HarmonyOS_Sans_TC_Black.ttf</file>
+        <file>fonts/HarmonyOS Sans/HarmonyOS_Sans_TC/HarmonyOS_Sans_TC_Bold.ttf</file>
+        <file>fonts/HarmonyOS Sans/HarmonyOS_Sans_TC/HarmonyOS_Sans_TC_Light.ttf</file>
+        <file>fonts/HarmonyOS Sans/HarmonyOS_Sans_TC/HarmonyOS_Sans_TC_Medium.ttf</file>
+        <file>fonts/HarmonyOS Sans/HarmonyOS_Sans_TC/HarmonyOS_Sans_TC_Regular.ttf</file>
+        <file>fonts/HarmonyOS Sans/HarmonyOS_Sans_TC/HarmonyOS_Sans_TC_Thin.ttf</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,60 @@
+<RCC>
+    <qresource prefix="/mainwindow">
+        <file>images/mainwindow/game_icon_gray.png</file>
+        <file>images/mainwindow/game_icon_white.png</file>
+        <file>images/mainwindow/record_icon_gray.png</file>
+        <file>images/mainwindow/record_icon_white.png</file>
+        <file>images/mainwindow/signify.png</file>
+        <file>images/mainwindow/study_icon_gray.png</file>
+        <file>images/mainwindow/study_icon_white.png</file>
+        <file>images/mainwindow/welcome_icon_gray.png</file>
+        <file>images/mainwindow/welcome_icon_white.png</file>
+    </qresource>
+    <qresource prefix="/game">
+        <file>images/game/GameLogo.png</file>
+        <file>images/game/GameLogo1.png</file>
+        <file>images/game/GameLogo2.png</file>
+    </qresource>
+    <qresource prefix="/study">
+        <file>images/study/A.png</file>
+        <file>images/study/B.png</file>
+        <file>images/study/C.png</file>
+        <file>images/study/D.png</file>
+        <file>images/study/E.png</file>
+        <file>images/study/F.png</file>
+        <file>images/study/G.png</file>
+        <file>images/study/H.png</file>
+        <file>images/study/I.png</file>
+        <file>images/study/J.png</file>
+        <file>images/study/K.png</file>
+        <file>images/study/L.png</file>
+        <file>images/study/M.png</file>
+        <file>images/study/N.png</file>
+        <file>images/study/O.png</file>
+        <file>images/study/P.png</file>
+        <file>images/study/Q.png</file>
+        <file>images/study/R.png</file>
+        <file>images/study/S.png</file>
+        <file>images/study/T.png</file>
+        <file>images/study/U.png</file>
+        <file>images/study/V.png</file>
+        <file>images/study/W.png</file>
+        <file>images/study/X.png</file>
+        <file>images/study/Y.png</file>
+        <file>images/study/Z.png</file>
+    </qresource>
+    <qresource prefix="/record">
+        <file>images/record/facebook.png</file>
+        <file>images/record/github.png</file>
+        <file>images/record/instagram.png</file>
+        <file>images/record/learn.png</file>
+        <file>images/record/score.png</file>
+        <file>images/record/tiktok.png</file>
+        <file>images/record/time.png</file>
+        <file>images/record/weibo.png</file>
+        <file>images/record/user.png</file>
+    </qresource>
+    <qresource prefix="/icon">
+        <file>images/signify.ico</file>
+    </qresource>
+</RCC>
