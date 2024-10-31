@@ -86,10 +86,10 @@ GameWindowLabel::GameWindowLabel(QWidget *parent) : QLabel(parent)
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    // Z is expelled from the letter list because of its particularity.
-    std::uniform_int_distribution<> distrib(0, 24);
-    const QString alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXY";
-    for(int i = 0; i < 25; i++) {
+    // J,Z is expelled from the letter list because of its particularity.
+    std::uniform_int_distribution<> distrib(0, 23);
+    const QString alphabet = "ABCDEFGHIKLMNOPQRSTUVWXY";
+    for(int i = 0; i < 24; i++) {
         int randomIndex = distrib(gen);
         wordTable.append(alphabet[randomIndex]);
     }

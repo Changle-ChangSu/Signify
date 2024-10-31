@@ -73,6 +73,8 @@ private:
 
     QProcess *process;  // the model.exe process
 
+    QString program;
+
 signals:
     void processStarted(QProcess *process);
 
