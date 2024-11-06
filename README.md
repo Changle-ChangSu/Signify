@@ -46,5 +46,7 @@ and the C++ program will start hearing on port 12345 on your computer.
 and the detected sign language will be sent through port 12345 to C++ program.
 
 3. You can use pyinstaller package to convert the model.py into an .exe file, and then put the folder into the specified path to activate "Camera" button.
-
+If the path is wrong, when you click the "Camera" button, you will see the path you should check.
+![image](https://github.com/user-attachments/assets/56a15e61-7163-4cfb-8601-3fc78ac3244d)
+You can also refer to Hugging Face "build.zip" file to see the file hierachy. ![Hugging Face Model](https://img.shields.io/badge/Hugging%20Face-Signify-blue)
    
