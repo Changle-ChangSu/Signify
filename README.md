@@ -42,7 +42,9 @@ Here in GitHub, only source code and pre-trained YOLO v8 model are provided.
 and the C++ program will start hearing on port 12345 on your computer.
 ![image](https://github.com/user-attachments/assets/f1bf112f-ad4c-436e-a167-208183e7a138)
 
-2. Open and run the model.py file in your complier such as VS Code. This will activate your camera and run the YOLO model,
+2. Open and run the model.py file in train10 folder in your complier such as VS Code. This will activate your camera and run the YOLO model,
 and the detected sign language will be sent through port 12345 to C++ program.
+
+3. You can use pyinstaller package to convert the model.py into an .exe file, and then put the folder into the specified path to activate "Camera" button.
 
    
