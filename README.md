@@ -50,3 +50,4 @@ If the path is wrong, when you click the "Camera" button, you will see the path 
 ![image](https://github.com/user-attachments/assets/56a15e61-7163-4cfb-8601-3fc78ac3244d)
 You can also refer to Hugging Face "build.zip" file to see the file hierachy. ![Hugging Face Model](https://img.shields.io/badge/Hugging%20Face-Signify-blue)
    
+The other pages could be seen in the demo.
